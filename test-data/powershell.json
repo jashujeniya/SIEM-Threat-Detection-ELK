@@ -1,0 +1,92 @@
+[
+  {
+    "event": {
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "process_started"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "pid": 2001
+    },
+    "host": {
+      "name": "LAB-PC"
+    }
+  },
+  {
+    "event": {
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "process_started"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "pid": 2002
+    },
+    "host": {
+      "name": "LAB-PC"
+    }
+  },
+  {
+    "event": {
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "process_started"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "pid": 2003
+    },
+    "host": {
+      "name": "LAB-PC"
+    }
+  },
+  {
+    "event": {
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "process_started"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "pid": 2004
+    },
+    "host": {
+      "name": "LAB-PC"
+    }
+  },
+  {
+    "event": {
+      "category": [
+        "process"
+      ],
+      "type": [
+        "start"
+      ],
+      "action": "process_started"
+    },
+    "process": {
+      "name": "powershell.exe",
+      "pid": 2005
+    },
+    "host": {
+      "name": "LAB-PC"
+    }
+  }
+]
