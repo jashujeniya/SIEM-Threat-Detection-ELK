@@ -1,0 +1,158 @@
+# SIEM Threat Detection and Custom Correlation Rules using Elastic Stack
+
+## Abstract
+This project demonstrates the development and testing of custom SIEM detection rules in an Elastic Stack environment. Three attack techniques were selected: credential stuffing, DNS tunnelling, and PowerShell exploitation. Threshold-based detection rules were configured in Elastic Security and tested with controlled synthetic events. Each rule successfully generated a security alert, demonstrating the basic detection and alerting workflow.
+
+## 1. Introduction
+Security Information and Event Management (SIEM) platforms help security teams collect, search, correlate, and monitor security events. Detection rules allow analysts to identify suspicious activity and generate alerts for investigation.
+
+The purpose of this project was to develop custom detection rules in Elastic Security for three common attack techniques and validate the rules using controlled laboratory events.
+
+## 2. Objectives
+- Configure an Elastic Stack SIEM environment.
+- Develop custom detection rules.
+- Detect repeated failed authentication attempts associated with credential stuffing.
+- Detect repeated DNS activity that may indicate DNS tunnelling.
+- Detect repeated PowerShell process executions.
+- Test each rule with synthetic events.
+- Verify that security alerts are generated.
+- Document the complete detection workflow.
+
+## 3. Lab Environment
+- Kali Linux
+- Docker and Docker Compose
+- Elasticsearch 9.1.3
+- Kibana 9.1.3
+- Elastic Security
+- KQL
+- JSON
+- VirtualBox
+
+## 4. Architecture
+[ Synthetic Test Events ] -> [ Elasticsearch ] -> [ Kibana / Elastic Security ] -> [ Custom Detection Rules ] -> [ Security Alerts ]
+
+## 5. Detection Methodology
+The project used a controlled detection-engineering workflow:
+
+1. Create the required index pattern.
+2. Define the event conditions using KQL.
+3. Select an appropriate grouping field.
+4. Set a threshold for repeated activity.
+5. Configure the rule schedule and look-back period.
+6. Generate synthetic test events.
+7. Verify the resulting alert in Elastic Security.
+8. Record the detection result.
+
+## 6. Credential Stuffing Detection
+
+### Attack Technique
+Credential stuffing involves repeated authentication attempts using previously obtained username/password combinations. From a defensive monitoring perspective, a high volume of failed authentication events from one source can be a useful indicator.
+
+### Rule Configuration
+- Rule name: Credential Stuffing Detection
+- Severity: Medium
+- Index pattern: `credential-*`
+- KQL: `event.category:authentication AND event.outcome:failure`
+- Group by: `source.ip.keyword`
+- Threshold: 10
+- Count: All results
+- Schedule: Every 5 minutes
+- Additional look-back: 1 minute
+
+### Testing
+Controlled synthetic failed-authentication events were generated from the documentation address `192.0.2.10`.
+
+### Result
+The threshold was reached and Elastic Security generated a Medium-severity alert.
+
+## 7. DNS Tunnelling Detection
+
+### Attack Technique
+DNS tunnelling can abuse DNS queries to communicate data through DNS infrastructure. Repeated or unusual DNS activity can be investigated as a potential indicator.
+
+### Rule Configuration
+- Rule name: DNS Tunnelling Detection
+- Severity: Medium
+- Index pattern: `dns-*`
+- KQL: `event.category:network AND event.type:dns`
+- Group by: `source.ip.keyword`
+- Threshold: 10
+- Count: All results
+- Schedule: Every 5 minutes
+- Additional look-back: 1 minute
+
+### Testing
+Controlled synthetic DNS events were generated from `192.0.2.20`. Synthetic query names were used under the reserved `.example.test` domain.
+
+### Result
+The threshold was reached and Elastic Security generated a Medium-severity alert.
+
+## 8. PowerShell Exploitation Detection
+
+### Attack Technique
+PowerShell is a legitimate Windows administration and automation tool but is also frequently monitored by SOC teams because attackers can abuse it for execution and post-compromise activity.
+
+### Rule Configuration
+- Rule name: PowerShell Exploitation Detection
+- Severity: Medium
+- Index pattern: `powershell-*`
+- KQL: `event.category:process AND process.name:powershell.exe`
+- Group by: `host.name.keyword`
+- Threshold: 5
+- Count: All results
+- Schedule: Every 5 minutes
+- Additional look-back: 1 minute
+
+### Testing
+Five controlled synthetic PowerShell process-start events were generated for the lab host `LAB-PC`.
+
+### Result
+The threshold was reached and Elastic Security generated a Medium-severity alert.
+
+## 9. Testing Results
+
+| Technique | Event Type | Grouping | Threshold | Result |
+|---|---|---|---:|---|
+| Credential Stuffing | Failed authentication | Source IP | 10 | Alert generated |
+| DNS Tunnelling | DNS activity | Source IP | 10 | Alert generated |
+| PowerShell Exploitation | PowerShell process start | Host | 5 | Alert generated |
+
+All three detections were successfully tested in the controlled laboratory environment.
+
+## 10. Observations
+- Threshold rules provide a simple way to detect repeated activity.
+- Grouping by source IP helps identify repeated authentication or DNS behavior from the same source.
+- Grouping PowerShell events by host helps identify repeated execution on a system.
+- Detection timing depends on the rule schedule and look-back configuration.
+- Fresh event timestamps are important when testing time-window-based detection rules.
+
+## 11. Limitations
+- The tests used synthetic events rather than production telemetry.
+- Simple thresholds may generate false positives.
+- The rules do not provide complete behavioral detection by themselves.
+- Production deployment would require tuning, exception handling, and richer telemetry.
+
+## 12. Future Improvements
+- Implement EQL/event-correlation rules.
+- Add Elastic Common Schema (ECS) enrichment.
+- Add baselining and anomaly detection.
+- Tune thresholds using normal environment activity.
+- Add allowlists and exceptions.
+- Add automated investigation or response actions.
+- Map detections to relevant MITRE ATT&CK techniques.
+
+## 13. Security and Ethical Considerations
+All testing was conducted in a controlled laboratory environment using synthetic events. No real credentials were used, no real data was exfiltrated, and no malicious PowerShell payload was executed. The project focuses on defensive monitoring and detection engineering.
+
+## 14. Conclusion
+The project successfully demonstrated how custom SIEM detection rules can be developed and tested using Elastic Security. Three techniques—credential stuffing, DNS tunnelling, and PowerShell exploitation—were represented using controlled synthetic telemetry. Each custom rule reached its configured threshold and generated a security alert. The exercise provided practical experience with SIEM configuration, KQL, event grouping, threshold detection, alert validation, and basic SOC detection engineering.
+
+## 15. Evidence Screenshots
+All evidence screenshots related to the project are maintained separately in the Evidence Screenshots folder. The evidence includes the Elastic environment, detection rule configurations, testing activity, and successful alerts for all three techniques.
+
+## 16. References
+- Elastic Security documentation
+- Elasticsearch documentation
+- Kibana documentation
+- MITRE ATT&CK knowledge base
+
