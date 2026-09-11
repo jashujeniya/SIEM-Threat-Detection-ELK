@@ -1,0 +1,21 @@
+[
+  {
+    "event": {
+      "category": [
+        "network"
+      ],
+      "type": [
+        "dns"
+      ],
+      "action": "dns_query"
+    },
+    "source": {
+      "ip": "192.0.2.20"
+    },
+    "dns": {
+      "question": {
+        "name": "a8f92kd7x1m4p9q2.example.test"
+      }
+    }
+  }
+]
